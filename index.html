@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>蔡徐坤的个人主页</title>
     <style>
         /* 全局样式重置 */
@@ -9,256 +10,792 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Microsoft YaHei", Arial, sans-serif;
+            font-family: "Inter", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* 页面背景 */
+        /* 定义CSS变量，支持主题切换 */
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #60a5fa;
+            --border-light: #e2e8f0;
+            --border-dark: #cbd5e1;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            --gradient-bg: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        /* 暗黑模式变量 */
+        .dark-mode {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-primary: #60a5fa;
+            --accent-secondary: #93c5fd;
+            --border-light: #273449;
+            --border-dark: #334155;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            --gradient-bg: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        /* 页面基础样式 */
         body {
-            background-color: #f5f7fa;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
+            background: var(--gradient-bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        /* 页面容器 */
+        .container {
             max-width: 1000px;
-            margin: 0 auto; /* 页面居中 */
+            margin: 0 auto;
+            padding: 24px 20px;
+        }
+
+        /* 加载动画 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0 30px;
+            margin-bottom: 8px;
+        }
+
+        .header-title {
+            font-size: 32px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            position: relative;
+        }
+
+        .header-title::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            opacity: 0.8;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .theme-toggle:active {
+            transform: translateY(0);
+        }
+
+        /* 内容卡片 */
+        .content-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0.9;
+        }
+
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--border-dark);
         }
 
         /* 标题样式 */
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-        }
-
-        h1 strong {
-            color: #3498db;
-        }
-
         h2 {
-            color: #2c3e50;
-            margin: 25px 0 15px;
-            padding-left: 10px;
-            border-left: 4px solid #3498db;
+            color: var(--text-primary);
+            margin: 0 0 24px 0;
+            font-size: 22px;
+            font-weight: 600;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        h2::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
         }
 
         h3 {
-            color: #7f8c8d;
-            text-align: center;
-            margin-top: 30px;
-            font-weight: normal;
+            color: var(--text-secondary);
+            margin: 16px 0;
+            font-weight: 500;
+            font-size: 16px;
         }
 
         /* 图片样式 */
-        img {
+        .profile-img {
             display: block;
-            margin: 0 auto 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            margin: 0 auto 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            max-width: 100%;
+            height: auto;
+            border: 4px solid var(--bg-secondary);
+            animation: float 6s ease-in-out infinite;
         }
 
-        img:hover {
-            transform: scale(1.02); /* 鼠标悬浮轻微放大 */
+        .profile-img:hover {
+            animation: pulse 2s ease-in-out infinite;
         }
 
         /* 段落样式 */
         p {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
             text-indent: 2em;
             font-size: 16px;
+            color: var(--text-primary);
+            line-height: 1.8;
         }
 
         /* 列表样式 */
         ul, ol {
-            margin-left: 40px;
-            margin-bottom: 20px;
+            margin-left: 24px;
+            margin-bottom: 24px;
         }
 
         ul li, ol li {
-            margin-bottom: 8px;
-            list-style-position: inside;
+            margin-bottom: 12px;
+            padding-left: 12px;
+            position: relative;
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        ul li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+        }
+
+        ul li:hover::before {
+            transform: scale(1.2);
+        }
+
+        ol {
+            counter-reset: list-counter;
+        }
+
+        ol li {
+            counter-increment: list-counter;
+        }
+
+        ol li::before {
+            content: counter(list-counter);
+            position: absolute;
+            left: -20px;
+            top: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
         }
 
         /* 链接样式 */
         a {
-            color: #3498db;
+            color: var(--accent-primary);
             text-decoration: none;
-            transition: color 0.3s ease;
+            position: relative;
+            font-weight: 500;
         }
 
-        a:hover {
-            color: #2980b9;
-            text-decoration: underline;
+        a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: var(--gradient-primary);
+            border-radius: 1px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        a:hover::after {
+            width: 100%;
         }
 
         /* 表格样式 */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
-            background-color: white;
-            border-radius: 8px;
+            margin: 24px 0;
+            border-radius: var(--radius-md);
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-sm);
         }
 
         th, td {
-            padding: 12px 15px;
+            padding: 16px 20px;
             text-align: left;
-            border-bottom: 1px solid #ecf0f1;
+            border-bottom: 1px solid var(--border-light);
         }
 
         th {
-            background-color: #3498db;
+            background: var(--gradient-primary);
             color: white;
-            font-weight: bold;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
         }
 
         tr:last-child td {
             border-bottom: none;
         }
 
+        tr {
+            transition: all 0.3s ease;
+        }
+
         tr:hover {
-            background-color: #f8f9fa; /* 行悬浮高亮 */
+            background: rgba(59, 130, 246, 0.05);
+            transform: scale(1.01);
         }
 
         /* 表单样式 */
         form {
-            background-color: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            padding: 0;
         }
 
-        form p {
-            margin-bottom: 15px;
+        .form-group {
+            margin-bottom: 24px;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
-            color: #2c3e50;
+            margin-bottom: 8px;
+            color: var(--text-primary);
             font-weight: 500;
+            font-size: 15px;
         }
 
         input[type="text"],
         input[type="email"],
         textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            transition: border-color 0.3s ease;
+            padding: 14px 18px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
         }
 
         input[type="text"]:focus,
         input[type="email"]:focus,
         textarea:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
         }
 
         textarea {
-            resize: vertical; /* 只允许垂直调整大小 */
+            resize: vertical;
+            min-height: 140px;
+            line-height: 1.7;
         }
 
         /* 按钮样式 */
-        button {
-            background-color: #3498db;
+        .btn {
+            background: var(--gradient-primary);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 4px;
+            padding: 14px 32px;
+            border-radius: 50px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            font-weight: 600;
+            box-shadow: var(--shadow-md);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
         }
 
-        button:hover {
-            background-color: #2980b9;
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
         }
 
-        /* 水平线样式 */
-        hr {
-            border: none;
-            border-top: 1px solid #ecf0f1;
-            margin: 20px 0;
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* 错误提示样式 */
+        .error-message {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 6px;
+            display: none;
+            padding-left: 4px;
+        }
+
+        /* 成功提示样式 */
+        .success-message {
+            background: linear-gradient(135deg, #22c55e 0%, #4ade80 100%);
+            color: white;
+            padding: 18px 24px;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            text-align: center;
+            display: none;
+            box-shadow: var(--shadow-md);
+            font-weight: 500;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            background: var(--gradient-primary);
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 999;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 20px rgba(59, 130, 246, 0.2);
+        }
+
+        /* 页脚样式 */
+        footer {
+            text-align: center;
+            padding: 32px 0 16px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        /* 装饰元素 */
+        .decor-dot {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: rgba(96, 165, 250, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+            top: -60px;
+            right: -60px;
+            filter: blur(40px);
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px 16px;
+            }
+
+            .content-card {
+                padding: 24px 20px;
+                margin-bottom: 20px;
+            }
+
+            .header-title {
+                font-size: 26px;
+            }
+
+            .theme-toggle {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 12px 16px;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                font-size: 15px;
+            }
+
+            .back-to-top {
+                width: 48px;
+                height: 48px;
+                bottom: 24px;
+                right: 24px;
+            }
         }
     </style>
 </head>
 <body>
-<h1>欢迎来到<strong>蔡徐坤</strong>的个人主页</h1>
-<hr><h2>关于我</h2>
-<br><img alt="图片显示错误" width="300" src="kunkun.jpg"></img>
-<p>大家好！我是练习时长两年半的个人练习生蔡徐坤，今年22岁，是一名计算机专业的大学生。</p>
-<p>我喜欢编程、唱歌、跳舞和打篮球。我的座右铭是："学无止境，每天进步一点点。"</p>
-<h2>我的技能</h2>
-<ul>
-    <li>HTML 网页制作</li>
-    <li>Python 编程</li>
-    <li>Office 办公软件</li>
-    <li>摄影与修图</li>
-</ul>
+<div class="container">
+    <!-- 顶部导航 -->
+    <div class="header">
+        <h1 class="header-title">蔡徐坤的个人主页</h1>
+        <button class="theme-toggle" id="themeToggle">
+            <span id="themeIcon">🌙</span> 切换暗黑模式
+        </button>
+    </div>
 
-<h2>我的学习计划</h2>
-<ol>
-    <li>学习 HTML 基础</li>
-    <li>学习 CSS 样式</li>
-    <li>学习 JavaScript 交互</li>
-    <li>完成一个完整的网站项目</li>
-</ol>
+    <!-- 关于我 -->
+    <div class="content-card">
+        <div class="decor-dot"></div>
+        <h2>关于我</h2>
+        <img class="profile-img" alt="个人照片" width="300" src="kunkun.jpg">
+        <p>大家好！我是练习时长两年半的个人练习生蔡徐坤，今年22岁，是一名计算机专业的大学生。</p>
+        <p>我喜欢编程、唱歌、跳舞和打篮球。我的座右铭是："学无止境，每天进步一点点。"</p>
+    </div>
 
-<h2>我喜欢的网站</h2>
-<ul>
-    <li><a href="https://www.baidu.com">百度</a>- 搜索引擎</li>
-    <li><a href="https://www.bilibili.com">哔哩哔哩</a>- 学习视频</li>
-    <li><a href="https://github.com">GitHub</a>- 代码托管</li>
-</ul>
+    <!-- 我的技能 -->
+    <div class="content-card">
+        <h2>我的技能</h2>
+        <ul>
+            <li>HTML 网页制作 - 精通语义化布局和响应式设计</li>
+            <li>Python 编程 - 掌握基础语法和常用库的使用</li>
+            <li>Office 办公软件 - 熟练使用 Word、Excel、PPT 进行文档处理</li>
+            <li>摄影与修图 - 具备基础的摄影技巧和后期修图能力</li>
+        </ul>
+    </div>
 
-<h2>联系我</h2>
-<table border="3">
-    <tr>
-        <th>联系方式</th>
-        <th>内容</th>
-    </tr>
-    <tr>
-        <td>邮箱</td>
-        <td>2187479230@qq.com</td>
-    </tr>
-    <tr>
-        <td>电话</td>
-        <td>138-5836-5764</td>
-    </tr>
-    <tr>
-        <td>地点</td>
-        <td>中国重庆市</td>
-    </tr>
-</table>
+    <!-- 学习计划 -->
+    <div class="content-card">
+        <h2>我的学习计划</h2>
+        <ol>
+            <li>深入学习 HTML5 新特性和语义化标签</li>
+            <li>掌握 CSS3 高级特性（动画、渐变、网格布局）</li>
+            <li>学习 JavaScript 核心概念和前端框架基础</li>
+            <li>完成一个集展示、交互、响应式于一体的完整网站项目</li>
+        </ol>
+    </div>
 
-<h2>给我留言</h2>
-<form>
-    <p>
-        <label>你的名字：</label>
-        <br><input type="text" name="name">
-    </p>
-    <p>
-        <label>你的邮箱：</label>
-        <br><input type="email" name="email">
-    </p>
-    <p>
-        <label>留言内容：</label>
-        <br><textarea name="message" rows="4" cols="50"></textarea>
-    </p>
-    <p>
-        <button type="submit">提交留言</button>
-    </p>
-</form>
+    <!-- 喜欢的网站 -->
+    <div class="content-card">
+        <h2>我喜欢的网站</h2>
+        <ul>
+            <li><a href="https://www.baidu.com" target="_blank">百度</a> - 国内领先的搜索引擎，快速获取学习资源</li>
+            <li><a href="https://www.bilibili.com" target="_blank">哔哩哔哩</a> - 丰富的编程学习视频，内容通俗易懂</li>
+            <li><a href="https://github.com" target="_blank">GitHub</a> - 全球最大的代码托管平台，开源项目学习宝库</li>
+        </ul>
+    </div>
 
-<hr><h3>版权所有 © 2025 蔡徐坤 | 最后更新：2025年1月</h3>
+    <!-- 联系方式 -->
+    <div class="content-card">
+        <h2>联系我</h2>
+        <table>
+            <tr>
+                <th>联系方式</th>
+                <th>内容</th>
+            </tr>
+            <tr>
+                <td>邮箱</td>
+                <td>2187479230@qq.com</td>
+            </tr>
+            <tr>
+                <td>电话</td>
+                <td>138-5836-5764</td>
+            </tr>
+            <tr>
+                <td>地点</td>
+                <td>中国重庆市</td>
+            </tr>
+        </table>
+    </div>
 
+    <!-- 留言表单 -->
+    <div class="content-card">
+        <h2>给我留言</h2>
+        <div class="success-message" id="successMessage">
+            留言提交成功！感谢你的留言 😊
+        </div>
+        <form id="messageForm">
+            <div class="form-group">
+                <label for="name">你的名字：</label>
+                <input type="text" id="name" name="name" placeholder="请输入你的姓名">
+                <div class="error-message" id="nameError">请输入你的名字（2-10个字符）</div>
+            </div>
+            <div class="form-group">
+                <label for="email">你的邮箱：</label>
+                <input type="email" id="email" name="email" placeholder="请输入你的邮箱地址">
+                <div class="error-message" id="emailError">请输入有效的邮箱地址（如：example@xxx.com）</div>
+            </div>
+            <div class="form-group">
+                <label for="message">留言内容：</label>
+                <textarea id="message" name="message" placeholder="请输入想对我说的话..."></textarea>
+                <div class="error-message" id="messageError">请输入留言内容（至少5个字）</div>
+            </div>
+            <button type="submit" class="btn">
+                <span>提交留言</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- 返回顶部按钮 -->
+    <div class="back-to-top" id="backToTop">
+        ↑
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        版权所有 © 2025 蔡徐坤 | 最后更新：2025年1月
+    </footer>
+</div>
+
+<script>
+    // 1. 暗黑模式切换功能（优化版）
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const body = document.body;
+
+    // 初始化主题
+    function initTheme() {
+        const isDark = localStorage.getItem('darkMode') === 'true';
+        if (isDark) {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<span id="themeIcon">☀️</span> 切换浅色模式';
+        } else {
+            themeToggle.innerHTML = '<span id="themeIcon">🌙</span> 切换暗黑模式';
+        }
+    }
+
+    initTheme();
+
+    themeToggle.addEventListener('click', () => {
+        const isDark = body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+
+        if (isDark) {
+            themeToggle.innerHTML = '<span id="themeIcon">☀️</span> 切换浅色模式';
+        } else {
+            themeToggle.innerHTML = '<span id="themeIcon">🌙</span> 切换暗黑模式';
+        }
+    });
+
+    // 2. 返回顶部功能（优化版）
+    const backToTop = document.getElementById('backToTop');
+
+    function toggleBackToTop() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('show');
+        } else {
+            backToTop.classList.remove('show');
+        }
+    }
+
+    window.addEventListener('scroll', toggleBackToTop);
+    toggleBackToTop(); // 初始化
+
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // 3. 表单验证与提交处理（增强版）
+    const messageForm = document.getElementById('messageForm');
+    const successMessage = document.getElementById('successMessage');
+
+    // 表单验证函数（更严格）
+    function validateForm() {
+        let isValid = true;
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        // 验证姓名（2-10个字符）
+        if (name.length < 2 || name.length > 10) {
+            document.getElementById('nameError').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('nameError').style.display = 'none';
+        }
+
+        // 验证邮箱
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            document.getElementById('emailError').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('emailError').style.display = 'none';
+        }
+
+        // 验证留言内容
+        if (message.length < 5) {
+            document.getElementById('messageError').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('messageError').style.display = 'none';
+        }
+
+        return isValid;
+    }
+
+    // 表单提交事件
+    messageForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (validateForm()) {
+            // 显示成功提示
+            successMessage.style.display = 'block';
+            messageForm.reset();
+
+            // 滚动到成功提示位置
+            successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // 3秒后隐藏成功提示
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+    });
+
+    // 4. 输入框焦点事件 - 清除错误提示
+    const formInputs = messageForm.querySelectorAll('input, textarea');
+    formInputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            const errorId = input.id + 'Error';
+            const errorElement = document.getElementById(errorId);
+            if (errorElement) {
+                errorElement.style.display = 'none';
+            }
+        });
+
+        // 输入框占位符动画（简单版）
+        input.addEventListener('input', () => {
+            if (input.value.trim()) {
+                input.style.transform = 'translateY(-1px)';
+            } else {
+                input.style.transform = 'translateY(0)';
+            }
+        });
+    });
+
+    // 5. 页面加载完成后的动画
+    window.addEventListener('load', () => {
+        // 为所有卡片添加渐入动画
+        const cards = document.querySelectorAll('.content-card');
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
+    });
+</script>
 </body>
 </html>
